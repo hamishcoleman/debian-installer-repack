@@ -18,8 +18,7 @@ debian.iso:
 	wget -O $@ $(URL)
 
 repack.iso: debian.iso
-	echo fake it until make it
-	cp $< $@
+	./repack -i $< -o $@
 
 # Automated testing targets
 test: repack.iso

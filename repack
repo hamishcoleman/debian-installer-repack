@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+#
+#
+
+usage() {
+    echo
+    echo "Usage: $0 -i filename -o filename"
+}
+
+# Some fixed strings that might change one day
+ARCH=amd64
+VERSION=10
+
+while getopts "hi:o:" opt; do
+    case "$opt" in
+        i)
+            INPUT=$OPTARG
+            ;;
+        o)
+            OUTPUT=$OPTARG
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+if [ -z "$INPUT" ]; then
+    echo "Need input filename"
+    exit 1
+fi
+
+if [ -z "$OUTPUT" ]; then
+    echo "Need output filename"
+    exit 1
+fi
+
+set -e
+
+DIR=$(mktemp --directory)
+
+xorriso -osirrox on -indev "$INPUT" -extract / "$DIR"
+chmod -R a+w "$DIR"
+
+# FIXME
+# - implement the useful parts here
+
+# Fix up checksums
+pushd "$DIR"
+find -follow -type f ! -name md5sum.txt -print0 | xargs -0 md5sum > md5sum.txt
+
+# TODO
+# - theoretically could extract the $DIR/.disk/mkisofs command
+xorriso -as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512 \
+    -J -joliet-long -cache-inodes \
+    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+    -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 \
+    -boot-info-table -no-emul-boot -eltorito-alt-boot \
+    -e boot/grub/efi.img -no-emul-boot \
+    -isohybrid-gpt-basdat \
+    -V "Debian $VERSION $ARCH auto" \
+    -o "$OUTPUT" \
+    "$DIR"
+
