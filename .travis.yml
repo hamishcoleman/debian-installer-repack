@@ -1,0 +1,11 @@
+os: linux
+dist: bionic
+
+language: c
+
+install:
+    - sudo apt-get update
+    - sudo make build-dep
+
+script:
+    - make test

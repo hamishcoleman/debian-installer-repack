@@ -21,6 +21,8 @@ repack.iso: debian.iso
 	echo fake it until make it
 	cp $< $@
 
+# Automated testing targets
+test: repack.iso
 
 # Some definitions to help with manual testing
 #
