@@ -16,9 +16,17 @@ build-dep:
 
 debian.iso:
 	wget -O $@ $(URL)
+REALLYCLEAN += debian.iso
 
 repack.iso: debian.iso
 	./repack -i $< -o $@
+CLEAN += repack.iso
+
+clean:
+	rm -f $(CLEAN)
+
+reallyclean: clean
+	rm -f $(REALLYCLEAN)
 
 # Automated testing targets
 test: repack.iso
