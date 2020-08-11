@@ -15,3 +15,16 @@ minor changes to an existing installation CD image.
 
 Specifically, this tool can append a new (or replacement) preseed config to
 an existing installer image.
+
+# Manual testing
+
+The makefile has two helper targets that can be used to quickly do some
+manual testing on the generated images.
+
+1. First, ensure you have the right packages `make build-dep`
+1. Run a test booting via legacy bios `make test_qemu_bios`
+1. Run a test booting via UEFI `make test_qemu_efi`
+
+If the re-packed installer image has been configured for a network install,
+the VM started during these tests exposes the guest SSH port on port 4022,
+so you can ssh into the installer environment and test that.

@@ -11,7 +11,8 @@ all:
 
 .PHONY: build-dep
 build-dep:
-	sudo apt-get -y install wget
+	sudo apt-get -y install wget \
+	    xorriso isolinux ovmf
 
 debian.iso:
 	wget -O $@ $(URL)
@@ -19,3 +20,30 @@ debian.iso:
 repack.iso: debian.iso
 	echo fake it until make it
 	cp $< $@
+
+
+# Some definitions to help with manual testing
+#
+# Note:
+# - As there is no hard drive configured in these test VMs, actually
+#   installing is not possible.
+# - These dont test booting from a USB stick, which is subtly different.
+#
+QEMU_RAM := 1500
+QEMU_CMD_NET := \
+    -netdev type=user,id=e0,hostfwd=::4022-:22 \
+    -device virtio-net-pci,netdev=e0
+QEMU_CMD_EFI := \
+    -drive if=pflash,format=raw,unit=0,file=/usr/share/ovmf/OVMF.fd,readonly=on
+
+QEMU_CMD := qemu-system-x86_64 \
+    -machine pc,accel=kvm:tcg -cpu qemu64,-svm \
+    -m $(QEMU_RAM)
+
+.PHONY: test_qemu_bios
+test_qemu_bios: repack.iso
+	$(QEMU_CMD) $(QEMU_CMD_NET) -cdrom $<
+
+.PHONY: test_qemu_efi
+test_qemu_efi: repack.iso
+	$(QEMU_CMD) $(QEMU_CMD_NET) $(QEMU_CMD_EFI) -cdrom $<
