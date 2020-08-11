@@ -5,7 +5,7 @@
 
 usage() {
     echo
-    echo "Usage: $0 -i filename -o filename"
+    echo "Usage: $0 -i filename -o filename [fragment ...]"
 }
 
 # Some fixed strings that might change one day
@@ -37,19 +37,34 @@ if [ -z "$OUTPUT" ]; then
     exit 1
 fi
 
+shift $((OPTIND-1))
+
 set -e
+
+TMP=$(mktemp --directory)
+for i in $*; do
+    [ -e "$i" ] && cat "$i" >>"$TMP"/preseed.cfg
+    shift
+done
+
+pushd "$TMP"
+echo preseed.cfg | cpio -H newc -R 0:0 -o |gzip -9 >preseed.cpio.gz
+popd
 
 DIR=$(mktemp --directory)
 
 xorriso -osirrox on -indev "$INPUT" -extract / "$DIR"
 chmod -R a+w "$DIR"
 
-# FIXME
-# - implement the useful parts here
+# Add our new preseed to the various initrd files
+for i in "$DIR"/install.amd/initrd.gz "$DIR"/install.amd/gtk/initrd.gz; do
+    cat "$TMP"/preseed.cpio.gz >>"$i"
+done
 
 # Fix up checksums
 pushd "$DIR"
 find -follow -type f ! -name md5sum.txt -print0 | xargs -0 md5sum > md5sum.txt
+popd
 
 # TODO
 # - theoretically could extract the $DIR/.disk/mkisofs command
@@ -64,4 +79,4 @@ xorriso -as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512 \
     -o "$OUTPUT" \
     "$DIR"
 
-rm -rf "$DIR"
+rm -rf "$DIR" "$TMP"
