@@ -8,11 +8,6 @@ usage() {
     echo "Usage: $0 -i filename -o filename [fragment ...]"
 }
 
-# Some fixed strings that will change one day
-# FIXME - extract this information from the image, dont assume it!
-ARCH=amd64
-VERSION=10
-
 while getopts "hi:o:" opt; do
     case "$opt" in
         i)
@@ -43,7 +38,7 @@ shift $((OPTIND-1))
 set -e
 
 TMP=$(mktemp --directory)
-for i in $*; do
+for i in "$@"; do
     [ -e "$i" ] && cat "$i" >>"$TMP"/preseed.cfg
     shift
 done
@@ -56,6 +51,17 @@ DIR=$(mktemp --directory)
 
 xorriso -osirrox on -indev "$INPUT" -extract / "$DIR"
 chmod -R a+w "$DIR"
+
+# Detect original media details
+DIST=unk
+VERS=unk
+ARCH=unk
+for i in "$DIR"/dists/*/Release; do
+    DIST=$(sed -n 's/^Label: *//p' "$i")
+    VERS=$(sed -n 's/^Version: *//p' "$i")
+    ARCH=$(sed -n 's/^Architectures: *//p' "$i")
+done
+VOLID="$DIST $VERS $ARCH auto"
 
 # Add our new preseed to the various initrd files
 for i in "$DIR"/install.amd/initrd.gz "$DIR"/install.amd/gtk/initrd.gz; do
@@ -76,7 +82,7 @@ xorriso -as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512 \
     -boot-info-table -no-emul-boot -eltorito-alt-boot \
     -e boot/grub/efi.img -no-emul-boot \
     -isohybrid-gpt-basdat \
-    -V "Debian $VERSION $ARCH auto" \
+    -V "$VOLID" \
     -o "$OUTPUT" \
     "$DIR"
 
