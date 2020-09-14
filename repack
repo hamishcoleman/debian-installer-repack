@@ -8,7 +8,8 @@ usage() {
     echo "Usage: $0 -i filename -o filename [fragment ...]"
 }
 
-# Some fixed strings that might change one day
+# Some fixed strings that will change one day
+# FIXME - extract this information from the image, dont assume it!
 ARCH=amd64
 VERSION=10
 
