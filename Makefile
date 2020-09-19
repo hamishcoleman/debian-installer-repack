@@ -5,6 +5,10 @@
 # Location to fetch an example image from
 URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-10.5.0-amd64-netinst.iso
 
+# Which preseed files to add to our test images
+TEST_PRESEED_CFG := \
+    examples/network-console.cfg
+
 all:
 	@echo no default target
 	exit 1
@@ -18,8 +22,8 @@ debian.iso:
 	wget -O $@ $(URL)
 REALLYCLEAN += debian.iso
 
-repack.iso: debian.iso
-	./repack -i $< -o $@
+repack.iso: debian.iso $(TEST_PRESEED_CFG)
+	./repack -i $< -o $@ $(TEST_PRESEED_CFG)
 CLEAN += repack.iso
 
 clean:
