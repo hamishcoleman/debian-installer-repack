@@ -7,7 +7,8 @@ URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmwa
 
 # Which preseed files to add to our test images
 TEST_PRESEED_CFG := \
-    examples/network-console.cfg
+    examples/auto-install.cfg \
+    examples/network-console.cfg \
 
 all:
 	@echo no default target
