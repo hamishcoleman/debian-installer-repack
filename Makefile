@@ -10,6 +10,7 @@ TEST_PRESEED_CFG := \
     examples/auto-install.cfg \
     examples/finish.cfg \
     examples/hostname.cfg \
+    examples/locale.cfg \
     examples/network-console.cfg \
     examples/popcon.cfg \
     examples/scan-cdrom.cfg \
