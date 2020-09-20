@@ -55,16 +55,20 @@ QEMU_CMD_NET := \
     -netdev type=user,id=e0,hostfwd=::4022-:22 \
     -device virtio-net-pci,netdev=e0
 QEMU_CMD_EFI := \
-    -drive if=pflash,format=raw,unit=0,file=/usr/share/ovmf/OVMF.fd,readonly=on
+    -drive if=pflash,format=raw,readonly,file=/usr/share/OVMF/OVMF_CODE.fd \
+    -drive if=pflash,format=raw,file=OVMF_VARS.fd
 
 QEMU_CMD := qemu-system-x86_64 \
     -machine pc,accel=kvm:tcg -cpu qemu64,-svm \
     -m $(QEMU_RAM)
+
+OVMF_VARS.fd: /usr/share/OVMF/OVMF_VARS.fd
+	cp $< $@
 
 .PHONY: test_qemu_bios
 test_qemu_bios: repack.iso
 	$(QEMU_CMD) $(QEMU_CMD_NET) -cdrom $<
 
 .PHONY: test_qemu_efi
-test_qemu_efi: repack.iso
+test_qemu_efi: repack.iso OVMF_VARS.fd
 	$(QEMU_CMD) $(QEMU_CMD_NET) $(QEMU_CMD_EFI) -cdrom $<
