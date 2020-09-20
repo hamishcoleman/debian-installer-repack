@@ -7,6 +7,7 @@ URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmwa
 
 # Which preseed files to add to our test images
 TEST_PRESEED_CFG := \
+    examples/accounts.cfg \
     examples/auto-install.cfg \
     examples/finish.cfg \
     examples/hostname.cfg \

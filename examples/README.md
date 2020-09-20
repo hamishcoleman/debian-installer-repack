@@ -1,5 +1,6 @@
 Some example pre-seed configuration files.
 
+- `accounts.cfg` - Initial user account creation settings
 - `auto-install.cfg` - Skip most of the questions prior to the network-console
 - `finish.cfg` - Avoid the final "finished" message
 - `hostname.cfg` - Define a default hostname for the installer to use
