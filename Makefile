@@ -12,6 +12,7 @@ TEST_PRESEED_CFG := \
     examples/finish.cfg \
     examples/hostname.cfg \
     examples/locale.cfg \
+    examples/mirror.cfg \
     examples/network-console.cfg \
     examples/popcon.cfg \
     examples/scan-cdrom.cfg \
