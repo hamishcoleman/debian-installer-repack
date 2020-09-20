@@ -9,3 +9,4 @@ Some example pre-seed configuration files.
 - `popcon.cfg` - Skip asking about popularity-contest
 - `proxy.cfg` - Configure a http proxy to use
 - `scan-cdrom.cfg` - Avoid asking about scanning additional cdrom media
+- `tasksel.cfg` - Configure which set of packages will be installed

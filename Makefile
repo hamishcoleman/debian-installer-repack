@@ -14,6 +14,7 @@ TEST_PRESEED_CFG := \
     examples/network-console.cfg \
     examples/popcon.cfg \
     examples/scan-cdrom.cfg \
+    examples/tasksel.cfg \
 
 all:
 	@echo no default target
