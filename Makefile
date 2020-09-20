@@ -62,15 +62,21 @@ QEMU_CMD_EFI := \
 
 QEMU_CMD := qemu-system-x86_64 \
     -machine pc,accel=kvm:tcg -cpu qemu64,-svm \
+    -hda hda \
     -m $(QEMU_RAM)
 
 OVMF_VARS.fd: /usr/share/OVMF/OVMF_VARS.fd
 	cp $< $@
+CLEAN += OVMF_VARS.fd
+
+hda:
+	truncate -s 10G hda
+REALLYCLEAN += hda
 
 .PHONY: test_qemu_bios
-test_qemu_bios: repack.iso
+test_qemu_bios: repack.iso hda
 	$(QEMU_CMD) $(QEMU_CMD_NET) -cdrom $<
 
 .PHONY: test_qemu_efi
-test_qemu_efi: repack.iso OVMF_VARS.fd
+test_qemu_efi: repack.iso hda OVMF_VARS.fd
 	$(QEMU_CMD) $(QEMU_CMD_NET) $(QEMU_CMD_EFI) -cdrom $<

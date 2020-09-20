@@ -5,3 +5,4 @@ debian.iso
 # Generated output
 repack.iso
 OVMF_VARS.fd
+hda
