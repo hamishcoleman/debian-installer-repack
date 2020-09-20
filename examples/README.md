@@ -5,3 +5,4 @@ Some example pre-seed configuration files.
 - `mirror.cfg` - Set the debian package archive mirror to use
 - `network-console.cfg` - The minimum needed to enable network ssh installation
 - `proxy.cfg` - Configure a http proxy to use
+- `scan-cdrom.cfg` - Avoid asking about scanning additional cdrom media
