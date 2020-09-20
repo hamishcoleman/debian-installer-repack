@@ -15,6 +15,7 @@ TEST_PRESEED_CFG := \
     examples/mirror.cfg \
     examples/network-console.cfg \
     examples/popcon.cfg \
+    examples/proxy.cfg \
     examples/scan-cdrom.cfg \
     examples/tasksel.cfg \
 
