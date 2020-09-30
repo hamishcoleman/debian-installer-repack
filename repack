@@ -5,16 +5,20 @@
 
 usage() {
     echo
-    echo "Usage: $0 -i filename -o filename [fragment ...]"
+    echo "Usage: $0 -i filename -o filename [-a] [fragment ...]"
 }
 
-while getopts "hi:o:" opt; do
+AUTOBOOT=false
+while getopts "hi:o:a" opt; do
     case "$opt" in
         i)
             INPUT=$OPTARG
             ;;
         o)
             OUTPUT=$OPTARG
+            ;;
+        a)
+            AUTOBOOT=true
             ;;
         *)
             usage
@@ -67,6 +71,32 @@ VOLID="$DIST $VERS $ARCH auto"
 for i in "$DIR"/install.amd/initrd.gz "$DIR"/install.amd/gtk/initrd.gz; do
     cat "$TMP"/preseed.cpio.gz >>"$i"
 done
+
+if [ "$AUTOBOOT" == "true" ]; then
+    # BIOS autoboot
+    echo "menu default" >> "$DIR"/isolinux/txt.cfg
+    echo "timeout 50" >> "$DIR"/isolinux/isolinux.cfg
+
+    # EFI autoboot
+    echo 'default="Install"' >> "$DIR"/boot/grub/grub.cfg
+    echo 'timeout_style=menu' >> "$DIR"/boot/grub/grub.cfg
+    echo 'timeout=5' >> "$DIR"/boot/grub/grub.cfg
+    cat <<EOF >>"$DIR"/boot/grub/theme/1
++ progress_bar {
+  left = 10%
+  width = 80%
+  top = 75%
+  height = 31
+
+  id = "__timeout__"
+  text = "@TIMEOUT_NOTIFICATION_LONG@"
+  text_color = "white"
+
+  highlight_style = "*"
+  bar_style = "*"
+}
+EOF
+fi
 
 # Fix up checksums
 pushd "$DIR"

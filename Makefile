@@ -33,7 +33,7 @@ debian.iso:
 REALLYCLEAN += debian.iso
 
 repack.iso: debian.iso $(TEST_PRESEED_CFG)
-	./repack -i $< -o $@ $(TEST_PRESEED_CFG)
+	./repack -a -i $< -o $@ $(TEST_PRESEED_CFG)
 CLEAN += repack.iso
 
 clean:
