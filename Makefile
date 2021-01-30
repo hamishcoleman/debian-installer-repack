@@ -3,7 +3,7 @@
 #
 
 # Location to fetch an example image from
-URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-10.6.0-amd64-netinst.iso
+URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-10.7.0-amd64-netinst.iso
 
 # Which preseed files to add to our test images
 TEST_PRESEED_CFG := \
@@ -33,7 +33,7 @@ debian.iso:
 REALLYCLEAN += debian.iso
 
 repack.iso: debian.iso $(TEST_PRESEED_CFG)
-	./repack -a -i $< -o $@ $(TEST_PRESEED_CFG)
+	./repack -a -s -i $< -o $@ $(TEST_PRESEED_CFG)
 CLEAN += repack.iso
 
 clean:

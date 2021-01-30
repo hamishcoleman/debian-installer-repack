@@ -5,11 +5,12 @@
 
 usage() {
     echo
-    echo "Usage: $0 -i filename -o filename [-a] [fragment ...]"
+    echo "Usage: $0 -i filename -o filename [-a] [-s] [fragment ...]"
 }
 
 AUTOBOOT=false
-while getopts "hi:o:a" opt; do
+SERIAL=false
+while getopts "hi:o:as" opt; do
     case "$opt" in
         i)
             INPUT=$OPTARG
@@ -19,6 +20,9 @@ while getopts "hi:o:a" opt; do
             ;;
         a)
             AUTOBOOT=true
+            ;;
+        s)
+            SERIAL=true
             ;;
         *)
             usage
@@ -96,6 +100,18 @@ if [ "$AUTOBOOT" == "true" ]; then
   bar_style = "*"
 }
 EOF
+fi
+
+if [ "$SERIAL" == "true" ]; then
+    # ISOLINUX
+    # Technically, this should be the first directive in the configuration file
+    # However, tests show that it works
+    echo "SERIAL 0" >> "$DIR"/isolinux/isolinux.cfg
+
+    # Grub
+    echo 'serial' >> "$DIR"/boot/grub/grub.cfg
+    echo 'terminal_output gfxterm serial' >> "$DIR"/boot/grub/grub.cfg
+    echo 'terminal_input gfxterm serial' >> "$DIR"/boot/grub/grub.cfg
 fi
 
 # Fix up checksums
