@@ -5,7 +5,7 @@ number of options at the bootloader prompt or do use a preseed config file.
 The preseed config is quite easy to use in a large environment where you can
 either control the boot network settings and serve up the preseed file.
 However, even in that scenario, there is often not quite enough control of
-the network environmet to be able to seamlessly configure the location of
+the network environment to be able to seamlessly configure the location of
 the preseed.
 
 There are multiple projects for building an entire Debian installer system
