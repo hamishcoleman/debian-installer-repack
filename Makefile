@@ -2,10 +2,9 @@
 # Basic testing and demonstration framework for this tool
 #
 
-DEB_VER := $(shell curl -s http://httpredir.debian.org/debian/dists/stable/Release |grep ^Version: |head -1 |cut -d" " -f2)
-
 # Location to fetch an example image from
-URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-$(DEB_VER).0-amd64-netinst.iso
+URL_BASE := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd
+URL_NAME = firmware-$(shell cat version.txt).0-amd64-netinst.iso
 
 # Which preseed files to add to our test images
 TEST_PRESEED_CFG := \
@@ -30,12 +29,23 @@ build-dep:
 	sudo apt-get -y install wget \
 	    xorriso isolinux ovmf
 
-debian.iso:
-	wget -O $@ $(URL)
+Release:
+	wget -O $@ http://httpredir.debian.org/debian/dists/stable/Release
+REALLYCLEAN += Release
+
+version.txt: Release
+	grep ^Version: $< |head -1 |cut -d" " -f2 >$@
+REALLYCLEAN += version.txt
+
+debian.iso: version.txt
+	wget -O $@ $(URL_BASE)/$(URL_NAME)
+	touch $@
 REALLYCLEAN += debian.iso
 
-repack.iso: debian.iso $(TEST_PRESEED_CFG)
-	./repack -a -s -i $< -o $@ $(TEST_PRESEED_CFG)
+repack.iso repack.txt: debian.iso $(TEST_PRESEED_CFG)
+	./repack -a -s -i $< -o repack.iso $(TEST_PRESEED_CFG)
+	echo "Version: $(shell cat version.txt)" >repack.txt
+	echo "Fragments: $(TEST_PRESEED_CFG)" >>repack.txt
 CLEAN += repack.iso
 
 clean:
