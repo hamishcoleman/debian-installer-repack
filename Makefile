@@ -2,8 +2,10 @@
 # Basic testing and demonstration framework for this tool
 #
 
+DEB_VER := $(shell curl http://httpredir.debian.org/debian/dists/stable/Release |grep ^Version: |cut -d" " -f2)
+
 # Location to fetch an example image from
-URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-10.7.0-amd64-netinst.iso
+URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-$(DEB_VER).0-amd64-netinst.iso
 
 # Which preseed files to add to our test images
 TEST_PRESEED_CFG := \
