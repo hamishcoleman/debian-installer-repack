@@ -2,7 +2,7 @@
 # Basic testing and demonstration framework for this tool
 #
 
-DEB_VER := $(shell curl http://httpredir.debian.org/debian/dists/stable/Release |grep ^Version: |cut -d" " -f2)
+DEB_VER := $(shell curl -s http://httpredir.debian.org/debian/dists/stable/Release |grep ^Version: |head -1 |cut -d" " -f2)
 
 # Location to fetch an example image from
 URL := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-$(DEB_VER).0-amd64-netinst.iso
