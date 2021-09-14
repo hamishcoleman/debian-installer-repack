@@ -1,0 +1,30 @@
+
+name: Continuous Deployment
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    deploy:
+        name: Builds a repack
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install Dependencies
+              run: |
+                  sudo apt-get update
+                  sudo make build-dep
+
+            - name: Build the repack
+              run: make test
+
+            - name: Upload to pages
+              uses: JamesIves/github-pages-deploy-action@4.1.4
+              with:
+                  branch: gh-pages
+                  folder: pages
+                  single-commit: true
+
