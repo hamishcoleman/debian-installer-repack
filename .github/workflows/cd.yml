@@ -21,13 +21,13 @@ jobs:
             - name: Build the repack
               run: |
                   make test
-                  mkdir pages
-                  cp repack.* pages
 
-            - name: Upload to pages
-              uses: JamesIves/github-pages-deploy-action@4.1.4
+            - name: Upload to releases
+              uses: softprops/action-gh-release@v1
               with:
-                  branch: gh-pages
-                  folder: pages
-                  single-commit: true
+                  prerelease: true
+                  name: prerelease
+                  files: |
+                      repack.iso
+                      repack.txt
 
