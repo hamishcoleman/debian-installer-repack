@@ -19,7 +19,10 @@ jobs:
                   sudo make build-dep
 
             - name: Build the repack
-              run: make test
+              run: |
+                  make test
+                  mkdir pages
+                  cp repack.* pages
 
             - name: Upload to pages
               uses: JamesIves/github-pages-deploy-action@4.1.4
