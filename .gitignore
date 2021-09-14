@@ -1,8 +1,13 @@
 
 # Downloaded source image
 debian.iso
+Release
 
 # Generated output
 repack.iso
+repack.txt
+version.txt
+
+# Used during testing
 OVMF_VARS.fd
 hda
