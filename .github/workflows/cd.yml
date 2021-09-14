@@ -27,6 +27,7 @@ jobs:
               with:
                   prerelease: true
                   name: prerelease
+                  tag_name: prerelease
                   files: |
                       repack.iso
                       repack.txt
