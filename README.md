@@ -28,3 +28,7 @@ manual testing on the generated images.
 If the re-packed installer image has been configured for a network install,
 the VM started during these tests exposes the guest SSH port on port 4022,
 so you can ssh into the installer environment and test that.
+
+# TODO
+
+- create btrfs with correct subvolume
