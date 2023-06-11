@@ -3,8 +3,8 @@
 #
 
 # Location to fetch an example image from
-URL_BASE := http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd
-URL_NAME = firmware-$(shell cat version.txt).0-amd64-netinst.iso
+URL_BASE := http://cdimage.debian.org/cdimage/release/current/amd64/iso-cd/
+URL_NAME = debian-$(shell cat version.txt).0-amd64-netinst.iso
 
 # Which preseed files to add to our test images
 TEST_PRESEED_CFG := \
