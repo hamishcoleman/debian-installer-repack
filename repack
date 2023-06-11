@@ -80,6 +80,7 @@ if [ "$AUTOBOOT" == "true" ]; then
     # BIOS autoboot
     echo "menu default" >> "$DIR"/isolinux/txt.cfg
     echo "timeout 50" >> "$DIR"/isolinux/isolinux.cfg
+    rm -f "$DIR"/isolinux/spkgtk.cfg
 
     # EFI autoboot
     echo 'default="Install"' >> "$DIR"/boot/grub/grub.cfg
