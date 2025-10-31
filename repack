@@ -46,6 +46,7 @@ shift $((OPTIND-1))
 set -e
 
 TMP=$(mktemp --directory)
+touch "$TMP"/preseed.cfg
 for i in "$@"; do
     [ -e "$i" ] && cat "$i" >>"$TMP"/preseed.cfg
     shift
