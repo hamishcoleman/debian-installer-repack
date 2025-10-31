@@ -123,7 +123,7 @@ popd
 
 # TODO
 # - theoretically could extract the $DIR/.disk/mkisofs command
-xorriso -as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512 \
+xorriso -as mkisofs -r \
     -J -joliet-long -cache-inodes \
     -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
     -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 \
